@@ -15,8 +15,8 @@ class Inventaire
         std::vector<unsigned> getExemplaires() const;
         std::vector<std::string> getType() ;
         std::vector<std::string> getDescription() ;
-        std::vector<Objet> getContenu() const;
-        void setContenu(std::vector<Objet> objs);
+        std::vector<Objet*> getContenu() const;
+        void setContenu(std::vector<Objet*> objs);
         void setExemplaires(std::vector<unsigned> nbObj);
        // void setType(std::vector<std::string> type);
        // void setDescription(std::vector<std::string> description);
@@ -29,7 +29,7 @@ class Inventaire
     private:
         std::string m_nom;
         unsigned m_taille;
-        std::vector<Objet> m_contenu;
+        std::vector<Objet*> m_contenu;
         std::vector<unsigned> m_exemplaires;
        // std::vector<std::string> m_type;
        // std::vector<std::string> m_description;

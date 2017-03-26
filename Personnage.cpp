@@ -29,7 +29,32 @@ void Personnage::afficherEtat()const
     cout << "Etat de : " << m_nom << endl;
     cout << "Vie : " << m_vie << endl;
     cout << "Mana : " << m_mana << endl;
-    cout << "Posture : " << m_posture << endl;
+    cout << "Bonus : ";
+    if(m_bonus.size() == 0) cout << "Aucun";
+    for(const vector<int> & B : m_bonus)
+        {
+            if(B[0] == SOIN)
+                cout << "Soin ";
+            if(B[0] == RAGE)
+                cout << "Rage ";
+        }
+    cout << endl << "Malus : ";
+    if(m_malus.size() == 0) cout << "Aucun";
+    for( const vector<int> & M : m_malus)
+        {
+            switch(M[0])
+            {
+            case POISON :
+                cout << "Poison";
+                break;
+            case GEL :
+                cout << "Gel";
+                break;
+            default :
+                break;
+            }
+        }
+    cout << endl << "Posture : " << m_posture << endl;
     m_arme.afficher();
     cout <<endl;
 }
@@ -43,7 +68,15 @@ void Personnage::recevoirDegats(int NbDegats)
 void Personnage::attaquer(Personnage &cible)
 {
     if (m_posture != "Attaque") return;
-    cible.recevoirDegats(m_arme.getDegats());
+    bool Enrage(false);
+    for(vector<int> & B : m_bonus)
+        if(B[0] == RAGE)
+            Enrage = true;
+    if(Enrage)
+        cible.recevoirDegats(2*(m_arme.getDegats()));
+    else
+        cible.recevoirDegats(m_arme.getDegats());
+
     m_arme.abimer(1);
 }
 void Personnage::boirePotionDeVie(int quantitePotion)
@@ -91,6 +124,43 @@ void Personnage::refreshInventaire()
     m_inventaire.refreshInventaire();
 }
 
+void Personnage::appliquerBonus()
+{
+    for(unsigned i(0); i < m_bonus.size(); ++i)
+    {
+        switch(m_bonus[i][0])
+        {
+        case SOIN :
+            this->boirePotionDeVie(m_bonus[i][2]) ;
+            if(  --m_bonus[i][1] == 0 ) m_bonus.erase(m_bonus.begin() + i);
+            break;
+        case RAGE :
+            if( --m_bonus[i][1] == 0)
+                m_bonus.erase(m_bonus.begin() + i);
+        }
+    }
+}
+
+void Personnage::appliquerMalus()
+{
+
+    for(unsigned i(0); i < m_malus.size(); ++i)
+    {
+        switch(m_malus[i][0])
+        {
+        case POISON :
+            this->recevoirDegats(m_malus[i][2]);
+            if( --m_malus[i][1] == 0)
+                m_malus.erase(m_malus.begin() + i);
+            break;
+        case GEL :
+            if( --m_malus[i][1] == 0)
+                m_malus.erase(m_malus.begin() + i);
+        }
+
+    }
+}
+
 bool Personnage::checkInventaire()
 {
     m_inventaire.checkInventaire();
@@ -111,7 +181,7 @@ void Personnage::setNom(string nom)
     m_nom = nom;
 }
 
-void Personnage::setInventaire(vector<Objet> objs, vector<unsigned> nbObj)
+void Personnage::setInventaire(vector<Objet*> objs, vector<unsigned> nbObj)
 {
     m_inventaire.setContenu(objs);
     m_inventaire.setExemplaires(nbObj);
@@ -119,14 +189,24 @@ void Personnage::setInventaire(vector<Objet> objs, vector<unsigned> nbObj)
    // m_inventaire.setDescription(desc);
 }
 
-void Personnage::setBonus(vector<string> Bonus)
+void Personnage::setBonus(vector<vector<int>> Bonus)
 {
     m_bonus = Bonus;
 }
 
-void Personnage::setMalus(vector<string> Malus)
+void Personnage::ajouterBonus(vector<int> Bonus)
+{
+    m_bonus.push_back(Bonus);
+}
+
+void Personnage::setMalus(vector<vector<int>> Malus)
 {
     m_malus = Malus;
+}
+
+void Personnage::ajouterMalus(vector<int> Malus)
+{
+    m_malus.push_back(Malus);
 }
 
 string Personnage::getNom()
@@ -138,12 +218,12 @@ string Personnage::getPosture()
     return m_posture;
 }
 
-vector<string> Personnage::getBonus()
+vector<vector<int>> Personnage::getBonus()
 {
     return m_bonus;
 }
 
-vector<string> Personnage::getMalus()
+vector<vector<int>> Personnage::getMalus()
 {
     return m_malus;
 }
@@ -157,4 +237,6 @@ Arme Personnage::getArme()
 {
     return m_arme;
 }
+
+
 
