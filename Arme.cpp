@@ -2,18 +2,26 @@
 
 using namespace std;
 
-Arme::Arme() : Objet("Arme"), m_degats(0), m_durabilite(0)
+Arme::Arme() : Objet(ARME), m_degats(0), m_durabilite(0)
 {
     //ctor
 }
 
-Arme::Arme(std::string nom, int degats, int durabilite)
-        : m_degats(degats), m_durabilite(durabilite),
-        Objet(nom, "Arme", ("Degats : " + to_string(m_degats) + ", Durailite : " + to_string(m_durabilite)))
-
+Arme::Arme(std::string nom, int degats, int durabilite)  : m_degats( degats), m_durabilite(durabilite),
+        Objet(nom, ARME, (  string (30 - nom.size(), ' ') +  '(' +
+                               "Degats : " + string(4 -to_string(degats).size(), ' ') + to_string(degats) + ", Durabilite : " + to_string(durabilite) + "  " + ')'))
 {
 
 }
+
+Arme::Arme(std::string nom, std::string description, int degats, int durabilite) : m_degats( degats), m_durabilite(durabilite),
+        Objet(nom, ARME, (  string (30 - nom.size(), ' ') +  '(' +
+                               "Degats : " + string(4 -to_string(degats).size(), ' ') + to_string(degats) + ", Durabilite : " + to_string(durabilite) + "  " + ')')
+                                + description)
+{
+
+}
+
 
 Arme::~Arme()
 {

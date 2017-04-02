@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include<iomanip>
 #include "Objet.h"
 
 class Arme : public Objet
@@ -10,6 +11,7 @@ class Arme : public Objet
     public:
         Arme();
         Arme(std::string nom, int degats, int durabilite);
+        Arme(std::string nom, std::string description, int degats, int durabilite);
         virtual ~Arme();
 
         void changer(std::string nom, int degats, int durabilite);

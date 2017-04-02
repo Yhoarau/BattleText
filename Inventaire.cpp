@@ -16,9 +16,13 @@ Inventaire::~Inventaire()
 std::vector<std::string> Inventaire::getNomsObj()
 {
     vector<string> Contenu;
-    Contenu.resize(0);
-    for(Objet & Obj : m_contenu)
-        Contenu.push_back(Obj.getNom());
+    Contenu.resize(m_contenu.size());
+    for( unsigned i(0); i < Contenu.size() ; ++i)
+    {
+        Objet O = *(m_contenu[i]);
+        Contenu[i] = (O.getNom());
+    }
+
     return Contenu;
 }
 
@@ -30,31 +34,39 @@ std::vector<unsigned> Inventaire::getExemplaires() const
 std::vector<std::string> Inventaire::getType()
 {
     vector<string> Types;
-    Types.resize(0);
-    for(Objet & Obj : m_contenu)
-        Types.push_back(Obj.getType());
+    Types.resize(m_contenu.size());
+
+    for( unsigned i(0); i < Types.size() ; ++i)
+    {
+        Objet O = *(m_contenu[i]);
+        Types[i] = (O.getType());
+    }
     return Types;
 }
 
 std::vector<std::string> Inventaire::getDescription()
 {
     vector<string> Descriptions;
-    Descriptions.resize(0);
-    for(Objet & Obj : m_contenu)
-        Descriptions.push_back(Obj.getType());
+    Descriptions.resize(m_contenu.size());
+    for( unsigned i(0); i < Descriptions.size() ; ++i)
+    {
+        Objet O = *(m_contenu[i]);
+        Descriptions[i] = (O.getNom());
+    }
     return Descriptions;
 }
 
-vector<Objet> Inventaire::getContenu() const
+vector<Objet*> Inventaire::getContenu() const
 {
+
     return m_contenu;
 }
 
-void Inventaire::setContenu(vector<Objet> objs)
+void Inventaire::setContenu(vector<Objet*> objs)
 {
-    m_contenu.resize(0);
-    for(Objet & Obj : objs )
-        m_contenu.push_back(Obj);
+    m_contenu.resize(objs.size());
+    for(unsigned i(0); i < objs.size() ; ++i)
+        m_contenu[i] = objs[i];
 }
 
 void Inventaire::setExemplaires(std::vector<unsigned> nbObj)
@@ -78,20 +90,24 @@ void Inventaire::setDescription(vector<string> descriptions)
         m_type.push_back(description);
 } */
 
-void Inventaire::ajouterObjet(Objet nom, unsigned nb)
+void Inventaire::ajouterObjet(Objet* nom, unsigned nb)
 {
+    bool estDansInv(false);
     for(unsigned i(0); i < m_contenu.size() ; ++i)
+    {
+        if (nom == (m_contenu[i]) )
         {
-            if(nom == m_contenu[i] )
-                m_exemplaires[i] += nb;
-            else
-            {
-                m_contenu.resize(m_contenu.size() + 1);
-                m_contenu[m_contenu.size() - 1] = nom;
-                m_exemplaires.resize(m_exemplaires.size() + 1);
-                m_exemplaires[m_exemplaires.size() - 1] = nb;
-            }
+            estDansInv = true;
+            m_exemplaires[i] += nb;
         }
+    }
+    if(!estDansInv)
+    {
+        m_contenu.resize(m_contenu.size() + 1);
+        m_contenu[m_contenu.size() - 1] = nom;
+        m_exemplaires.resize(m_exemplaires.size() + 1);
+        m_exemplaires[m_exemplaires.size() - 1] = nb;
+    }
 
 /*
     vector<Objet>::iterator it = find(m_contenu.begin(), m_contenu.end(), nom);

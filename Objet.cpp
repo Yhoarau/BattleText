@@ -7,12 +7,12 @@ Objet::Objet()
     //ctor
 }
 
-Objet::Objet(string type) : m_type(type)
+Objet::Objet(e_Type type) : m_type(type)
 {
     //ctor
 }
 
-Objet::Objet(string nom, string type, string desc) : m_nom(nom), m_type(type), m_description(desc)
+Objet::Objet(string nom, e_Type type, string desc) : m_nom(nom), m_type(type), m_description(desc)
 {
     //ctor
 }
@@ -27,7 +27,7 @@ void Objet::setNom(string nom)
     m_nom = nom;
 }
 
-void Objet::setType(string type)
+void Objet::setType(e_Type type)
 {
     m_type = type;
 }
@@ -42,7 +42,7 @@ string Objet::getNom()
     return m_nom;
 }
 
-string Objet::getType()
+e_Type Objet::getType()
 {
     return m_type;
 }
@@ -52,13 +52,14 @@ string Objet::getDescription()
     return m_description;
 }
 
-bool Objet::estEgal(Objet const& b)
+/* bool Objet::estEgal(Objet const& b)
 {
     return (m_nom == b.m_nom && m_type == b.m_type && m_description == b.m_description);
 
-}
+} */
 
- bool Objet::operator==(Objet const& b)
+bool Objet::operator==(Objet const& b)
 {
-    return this->estEgal(b);
+    return (m_nom == b.m_nom && m_type == b.m_type && m_description == b.m_description);
+    //return this->estEgal(b);
 }

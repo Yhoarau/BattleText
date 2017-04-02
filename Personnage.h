@@ -8,6 +8,10 @@
 #include "Arme.h"
 #include "Inventaire.h"
 
+enum e_Effet
+{
+    SOIN, POISON, GEL, RAGE, CHARGE, MARQUE, INVINCIBILITE,
+};
 
 class Personnage
 {
@@ -25,17 +29,25 @@ class Personnage
         void changerPosture(std::string nouvellePosture);
         void checkArme();
         void refreshInventaire();
+        void appliquerBonus();
+        void appliquerMalus();
         bool checkInventaire();
         void setNom(std::string);
-        void setInventaire(std::vector<Objet> nomObj, std::vector<unsigned> nb);
-        void setBonus(std::vector<std::string> Bonus);
-        void setMalus(std::vector<std::string> Malus);
+        void setMana(int);
+        void setBouclier(int);
+        void setInventaire(std::vector<Objet*> nomObj, std::vector<unsigned> nb);
+        void setBonus(std::vector<std::vector<int>> Bonus);
+        void ajouterBonus(std::vector<int>);
+        void setMalus(std::vector<std::vector<int>> Malus);
+        void ajouterMalus(std::vector<int>);
         bool estVivant() const;
-        bool estArme();
+        bool estArme() ;
         std::string getNom();
+        int getMana();
+        int getBouclier();
         std::string getPosture();
-        std::vector<std::string> getBonus();
-        std::vector<std::string> getMalus();
+        std::vector<std::vector<int>> getBonus();
+        std::vector<std::vector<int>> getMalus();
         Inventaire getInventaire();
         Arme getArme();
 
@@ -44,10 +56,11 @@ class Personnage
     private:
         std::string m_nom;
         std::string m_posture;
-        std::vector<std::string> m_bonus;
-        std::vector<std::string> m_malus;
+        std::vector<std::vector<int>> m_bonus;
+        std::vector<std::vector<int>> m_malus;
         int  m_vie;
         int m_mana;
+        int m_bouclier;
         Arme m_arme;
         Inventaire m_inventaire;
 };
